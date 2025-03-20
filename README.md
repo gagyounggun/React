@@ -1,6 +1,53 @@
 # 202330101 가경건
 
 ### 0320 (2주차)
+
+
+
+## React 개요.
+component 단위로 개발하여 레고를 조립하듯 앱을 완성합니다.
+component는 작은 기능을 실행할 수 있는 하나의 모듈입니다.
+* component의 조립 과정에만 집중해주세요
+
+Thumbnail, LikeButton, 그리고 Video 등 react component를 생성하고, 이 component를 결합해 화면을 구성함
+
+React component는 기본적으로 JavaScript함수
+- 조건에 따라 화면 변화 -> if문
+- 목록을 표시 하고 싶다 -> map()함수
+
+### full-stack App 개발을 도와주는 React Framework
+
+React의 component를 조합할 수는 있지만, 라우팅 및 데이터 가져오기 방법등을 규정하지는 않습니다.
+ 전체 앱을 빌드 하려면 Next.js 또는 Remix 와 같은 full-stack React Framework을 사용
+하나의 아키텍처 소프트웨어 사이에서 유기적인 관계를 표현하고, 소프트웨어의 업그래이드를 통제하는 지침
+
+Framework을 사용하면 서비에서 실행되거나 빌드중에서 비동기 component에서 데이터를 가져올 수 있다.
+
+* full-stack App 개발하는 것이라면 Framework을 사용하자!
+
+같은 기술을 사용하여, 웹 앰과 네이티브 앱을 모두 구축가능
+
+모든 플랫폼에 잘 어울리는 인터페이스
+
+-웹의 본질의 충실하기-
+빠르게 로드되길 기대. 리엑트는 서버에서 데이터를 가져오는 동안 HTML을 먼저 스트리밍, JavaScript 코드가 load 되기 전에
+컨텐츠를 점진적으로 채울 수 있다.
+- 클라이언트 측에서 API를 사용해, 렌더링 도중에 UI를 반응하도록 할 수 있다
+
+[진정한 네이티브 UX를 실현]
+자신의 플랫폼과 같은 모양과 느낌, React Native 와 Expo 사용하면  Android, ios 등을 위한 앱을 React로 빌드
+UI가 네이티브이기 때문에 그렇게 느껴짐.    
+- Web View가 아니라, Android 및 iOs View를 사용하기 때문     
+
+1. 웹 개발자도 네이티브 개발자도 될 수 있다.   
+2. 사용자경험의 희생 없이 다양한 플랫폼에 앱을 출시.
+3. 플랫폼 간의 장벽이 없음, 전체기능을 협업을 통해 개발할 수 있는 팀이 가능.
+
+주소 : https://ko.react.dev/
+
+
+
+
 node modules/
 
 public/
@@ -39,7 +86,7 @@ src/index.css
 | Git 관리 | 보통 Git에 포함됨 | 포함하는 것이 권장 되지만, node modules/처럼 무시할 수 도 있음 |
 
 
-#### [ package.jsond을 유지해야 하는 이유 ]
+#### [ package.json을 유지해야 하는 이유 ]
 
 #### [ node module의 재설치하는 경우 ]
 - 팀 작업 하면서 clone 했을 경우
@@ -51,6 +98,11 @@ clone 받은 프로젝트의 경우
 #### [ node module의 재설치]
 1. node_modules 폴더와 package-lock.json 파일 삭제
       ``` $ rm -rf node_modules package-lock.json ```
+
+      [package-lock.json 삭제하는 이유]
+      - package-lock.json이 손상되었거나, 잘못된 의존성이 있을 때
+      예) 의존성 충돌, 
+
 
 
 
