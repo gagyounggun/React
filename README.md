@@ -1,5 +1,52 @@
 # 202330101 가경건
 
+### 0327 (3주차)
+- component는 고유한 조릭과 모양을 가진 UI 일부
+- component는 버튼 처럼 작을 수도, 전체 페이지처럼 클 수도 있다.
+- component는 마크업 번환(return)하는 JavaScript 함수
+
+### component의 생성 맟 nesting(중첩)
+1. 어떤 디렉토리에 파일을 만들지       2. 파일 이름      3. 함수는 어떻게 구성할지
+
+## export default와 export의 차이
+* Named Exports (export)
+      - 하나의 파일 안에 여러개의 component가 있을 때
+ 
+* Default Exports (export default)
+      - 하나의 파일 안에 하나의 component가 내보낼 때
+      - 사용하는 쪽에서는 어떤 이름을 사용해도 상관 없음.
+
+작성한 코드의 마크업 문법을 JSX라고 함
+편의성을 위해 JSX를 사용하고, JSX는 HTML보다 더욱 엄격한 문법을 적용
+여러 개의 component를 JSX 태그로 반환할 수 있음. <div>...</div> 또는 <>...</>을 해줘야함
+
+className 으로 CSS 클래스를 지정함. React는 CSS파일을 추가하는 방법을 규정하지 않습니다.
+<link> 태그 추가는 추천 안함.
+
+
+
+Escape Back
+return {
+      <h1> {user.name}</h1>
+}
+
+return( <img className="avatar" src>)
+
+
+### key props
+- 리스트를 렌더링하기 위해 for 문 및 map() 함수
+- <li>에 key 속성(attribute)
+- 각 항목에 대해 고유하게 식별하는 문자열 또는 숫자를 전달
+- 항목을 삽입, 삭제 또는 재정렬할 때, 어떤 일이 일어났는지 알기 위해 key를 사용
+
+
+
+
+
+
+
+
+
 ### 0320 (2주차)
 
 
