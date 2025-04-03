@@ -1,12 +1,18 @@
 # 202330101 가경건
 
 
-### 0403 (4주차) Tic Tac Toe
+## 0403 (4주차) Tic Tac Toe
 
 components, props, state에 대해 학습
 3개의 말을 한줄로 완성하면 승리
 
+- App component는 default export로 선업
+-
 
+## 보드만들기
+Square component에는 사각형이 하나 뿐이지만 게임을 진행하려면 9개 필요
+fragment Tag나 division Tag를 사용해 wrpping 해 줌
+block 형태로
 
 
 
