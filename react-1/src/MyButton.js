@@ -1,7 +1,11 @@
 export default function MyButton() {
+  function handleClick() {
+    alert('Button clicked!');
+  }
+
   return (
-    <button>
+    <button onClick={handleClick}>
       I'm a button
     </button>
-  );
+  )
 }

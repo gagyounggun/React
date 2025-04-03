@@ -1,5 +1,109 @@
 # 202330101 가경건
 
+
+### 0403 (4주차) Tic Tac Toe
+
+components, props, state에 대해 학습
+3개의 말을 한줄로 완성하면 승리
+
+
+
+
+
+
+
+### 0403 (4주차)
+## 9. 화면 업데이트하기
+component가 특정 정보를 "기억"해 두었다가 표시, 예) 버튼 클릭한 횟수 -> 하려면 component에 state를 추가
+- React에서 useState를 import합니다.
+- useState는 react 파일 안에 Named Exports 선언되어 있는 여러 개 component 중 하나
+* 이제 component 내부에 state 변수를 선언 할 수 있음
+```
+function MyButton() {
+      const [count, setCount] = useState(0);
+      // ...
+}
+```
+- useState로 부터 현재의 state를 저장할 수 있는 변수인 count와 이를 업데이트할 수 있는 함수인 setCount를 얻을 수 있습니다.
+- 이름은 = [something, setSomething]으로 작성하는 것이 일반적
+- 변수 이름과 이름 앞에 set를 붙인 업데이트 함수가 관용적
+```
+function MyButton() {
+  const [count, setCount] = useState(0);
+
+  function handleClick() {
+    setCount(count + 1);
+  }
+
+  return (
+    <button onClick={handleClick}>
+      Clicked {count} times
+    </button>
+  );
+}
+```
+
+App.js에 CountState compont를 호출
+2개 이상의 버튼을 만들어야함
+
+## Hook 사용하기
+ - use 로 시작하는 함수
+ - useState는 React에서 제공하는 내장 Hook
+ - 기존의 것을 조립하여 기존의 Hook를 작성
+ - Hook은 다른 함수 보다 더 제한적
+ - component 또는 다른 Hook의 상단에서만 Hook을 호출할 수 있음
+ 
+ (Rules of Hooks)
+ 렌더링 및 상태 관리 메커니즘과 밀접하게 연결되어 있음
+
+```
+// 잘못된 예제
+function MyComponent() {
+      if (someCondition) {
+            useState(0);
+      }
+}
+
+// 올바른 예제
+function MyComponent() {
+      const [count, setCount] = useState(0);
+}
+```
+React 함수형 component 또는 사용자  Hook 내부에서만 사용
+ React의 동작을 예측 가능하고, 안정성을 높이기 위해,
+ 
+ 
+ 
+ 1. rendering 순서를 보장하기 위해
+ - 조건문이나 반복문에서 Hooks를 사용하면 매 rendering 마다 Hook의 호출 순서다 달라질 수 도 있기에
+
+ 2. 불필요한 사이드 이펙트 방지
+ - component가 여러 번 rendering될 때마다 동일한 순서로 Hook이 실행되어야 React가 의도한 동작을 수행할 수 있다.
+
+
+
+
+
+## 11. component 간 데이터 공유
+꼭 필요한 경우를 제외하고는 별도의 component를 만들자
+- commit을 해두면 checkout을 통해 확인이 가능함
+- 왜 번수는 count 하나인데 버튼 3개의 데이터가 모두 다른 state를 갖는 것일까?
+- CountState component는 독립적인 count가 있는 것 처럼 동작했고, 클릭한 버튼의 count만 변경
+- component 객체가 독립적으로 동작하기에 component는 하나지마, count 변수도 객체로 여러개 복사된 것이나 마찬가지
+
+
+* 동일한 count를 표시하고 함께 업데이트하려면, state를 개별 버튼에서 모든 버튼이 포함된 가장 가까운 component 안으로 이동
+
+
+- parent component(main component) 인 App에서 전달한 props을 읽을 수 있도록
+
+
+
+
+
+
+
+
 ### 0327 (3주차)
 - component는 고유한 조릭과 모양을 가진 UI 일부
 - component는 버튼 처럼 작을 수도, 전체 페이지처럼 클 수도 있다.
