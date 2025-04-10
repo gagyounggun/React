@@ -1,7 +1,114 @@
 # 202330101 가경건
 
 
-## 0403 (4주차) Tic Tac Toe
+### 0410 (5주차) Tic Tac Toe
+
+## Tic Tac Toe props를 통해 데이터 전달하기 
+- React의 component architecture를 사용해서 재사용할 수 있는 component를 만듬
+- component를 만드는 이유는 재사용성을 높이기 위해서,
+- Board component를 만들고, Square component의 내용을 복사함
+- Square component의 button을 하나만 남기고 모두 삭제
+- 
+
+
+``` 
+      function foo(a,b) {
+            return a+b;
+      } 
+      bar = foo(100, 32)
+```
+
+
+## Tic Tac Toe 사용자와 상호작용하는 컴포넌트 만들기
+- 클릭된 것을 기억하고 X로 채워지게 하기
+- 기억하기 위해 state를 사용
+- React는 상태 기억을 위해 useState라는 Hook을 제공함
+- state에 저장하고 Square가 클릭하면 값이 변경되도록
+
+1. useState를 import
+2. Square 컴포넌트에서 value prop을 제거 대신 useState를 사용
+3. Square 컴포넌트의 시작 부분에 useState를 호출하고, value라는 이름의 state변수를 반환
+
+```
+      import { useStatee } from 'react';
+
+      function Square() {
+            const [value, setValue] - useState(null);
+      }
+
+      function handleClick() {
+            //.......
+      }
+```
+
+- value는 값을 저장하는 변수, setValue는 값을 변경하는 함수
+- useState null은 이 state 변수의 초기값
+
+## Tic Tac Toe_ React Developer Tools
+
+### 1. state 끌어올리기
+- state를 기억하고 있고,
+- Board가 각각의 Square에 state를 요청하는 것은 어렵고, 버그에 취약하기에 >
+- state를 각 Square가 아닌 부모 컴포넌트인 Bord에 저장
+- 여러 자식 컴포넌트에서 데이터를 수집, 서로 통신, 부모 컴포넌트에서 공유 state를 선언
+- props를 통해 해당 state를 자식 컴포넌트에 전달
+- 자식 컴포넌트 서로동기화, 부모 컴포넌트와도 동기화
+
+- React 컴포넌트를 리팩토링할 때 부모 컴포넌트로 state를 끌어올리는 것
+1. 9개의 null의 배열을 기본값으로 state 변수 squares를 선언
+```
+      export default function Board() {
+            const [squares, setSquarse] = useState(Array(9).fill(null));
+            return (
+               //...
+            );
+      }
+```
+- Array(9).fill(null)은 9개의 앨리먼트로 배역을 생성하고, 각 앨리먼트를 null로 설정-
+- 그리고 state 변수 squares와 함수 setSquares 선업
+- 보드를 체우며 squares 배열은 이와 같은 모양
+```
+      ['0', null, 'X', 'X', 'X', 'O', 'O', null, null]
+```
+
+* component 분리 
+Board component가 export default로 선언, component 분리
+
+
+
+[ 남은 작업은 ... ]
+- 이제 각 Square는 'X', 'O'
+- Square 에서 컴포넌트가 클릭 될 때 호출할 함수 부터 -> onSquareClick으로 호출
+```
+      function Square({ value, onSquareClick })  {
+  return (
+    <div>
+      <button className="square" onClick={{onSquareClick}}>
+        {value}
+      </button>
+    </div>
+    )
+}
+```
+
+
+
+
+
+### 2. 불변성이 왜 중요할까요
+### 3. 순서 정하기
+### 4. 승자 결정하기
+
+
+
+
+
+
+
+
+
+
+### 0403 (4주차) Tic Tac Toe
 
 components, props, state에 대해 학습
 3개의 말을 한줄로 완성하면 승리
