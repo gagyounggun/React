@@ -1,5 +1,222 @@
 # 202330101 가경건
 
+### 0417 (6주차) Tic Tac Toe
+
+
+## state 끌어올리기
+- i를 handleClick에 전달
+- 부모 Board 컴포넌트는 자식 Square 컴포넌트가 올바르게 표시도리 수 있도록 props를 전달
+- Square를 클릭하면 자식 Square,
+
+1.
+- button이 Square로부터 onClick prop으로 받은 함수가 실행
+- Square컴포넌트는 -> Board에서 해당 함수를 onSquareClick props로 받음
+- Board 컴포넌트는 -> JSX에서 해당함수를 직접정의
+- 0을 인수로 handleClick을 호출
+
+2. null에서 X로 업데이트
+
+3. Squares state가 업데이트 되어 Board와 그 모든 자식이 다시 렌더링 됨
+-> Square 컴포넌트의 value prop이 null에서 X로 변경
+
+
+- 이벤트를 나타내는 prop는 onSomething과 같은 이름 사용하고, 
+- 이벤트를 처리하는 함수를 정의 할 때는 handleSomething 과 같은 이름
+
+
+```
+<div className="board-row">
+        <Square value={squares[0]} onSquareClick={ () => handleClick(0)} />
+
+        //  화살표 함수 로 함수를 짧게 정의하는 방법, handleClick(0)가 화살표 함수 호출하고 
+```
+
+```
+      function handleClick() {
+            const nextSquares = squares.slice();
+            nextSquares[0] = "X";
+            setSquares(nextSquares);
+      }
+
+```
+
+## 불변성이 왜 중요할까요
+- slice()를 호출하여 squares 배열의 사본을 생성하는 방법에 주목하세요.
+- 데이터를 변경하는 방법에는 2가지 가있다.
+1. 첫 번째 방법은 데이터 값을 직접 변경하여 데이터를 변형하는 것
+2. 두 번째 방법은 변경 사항이 있는 새 복사본으로 데이터를 대체하는 것
+```
+const squares = [null, null, null, null, null, null, null, null];
+squares[0] = 'X';
+// squares 배열을 직접 변경
+
+```
+```
+const squares = [null, null, null, null, null, null, null, null];
+const nextsquares = ['X', null, null, null, null, null, null, null, null];
+// squares 배열을 복사 대체
+
+```
+ 최종 결과는 같지만, 직접 변형하지 않음으로써 몇 가지 이점을 얻을 수 있다.
+ 1. 리렌더링 자체를 피할 수 있음. 
+ 2. 데이터의 변경 여부를 저렴한 비용으로 판단할 수 있음.
+
+
+ ## 교대로 두기
+ - O,X 번갈아 한 번씩 두기, X가 두었는지 아닌지 현재의 상태 X차례면 true, O차례면 false
+
+ ```
+ const [xIsNext, setXIsNext] = useState(true);
+ const [squares, setSquares] = useState(Array(9).fill(null));
+
+ function handleClick(i) {
+      const nextSquares = squares.slice();
+      if (xIsNext) {
+            nextSquares[i] = "X";
+      } else{
+            nextSquares[i] = "O";
+      }
+      setSquares(nextSquares);
+      setXIsNext(!xIsNext);
+ }
+
+ ```
+
+## 승자 결정하기
+- 게임의 승자가 결정되어 더 이상 차례를 만들 필요가 없을 때도 표시
+- 9개의 사각형 배열에서 승자를 화가인하고 'X','O' 또는 null을 반환하는 calculateWinner를 추가
+
+- calculateWinner를 추가 해야함
+
+- calculateWinner를 앞이든 뒤에는 정의해 주어야함.
+
+1. 먼저 승리할 수 있는 경우의 자리를 2차원 배열로 선언
+2. 선언된 배열 line과 squares를 비교하기 위한 for문 작성
+3. 구조 분해 할당 
+```
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+return null;
+}
+  ```
+
+
+## 구조 분해 할당
+- 배열이나 객체의 구조를 해체하여 내부 값을 개별 변수에 쉽게 할당하는 방법
+- 이를 통해 코드의 간결성과 가독성을 높일 수 있다
+
+``` 
+const paires = [
+ [1,2], [3,4], [5,6]
+];
+
+pairs.map(([x, y]) => {
+      console.log(`x: ${x}, y: ${y}`);
+});
+// 배열의 경우
+```
+
+``` 
+const users = [
+  {id: 1, name : "Alice" },
+  {id: 2, name : "Bob" },
+];
+
+users.map(({id, name}) => {
+      console.log(`${id} : ${name}`);
+});
+// 객체의 경우
+```
+
+## 승자 결정하기
+4. calculateWinner(squares)를 호출하여 플레이어가 이겼는지 확인
+5. 사용자가 이미 X 또는 O가 있는 사각형을 클릭했는지 확인 하는 것과 동시에 수행할 수 있음.
+6. 두 경우 모두 함수 즉시 종료
+
+``` 
+ function handleClick(i) {
+      if ( squares[i] || calculateWinner(squares)) {
+            return;
+      }
+      const nextSquares =squares.slice();
+ }
+ ```
+
+
+## 승자 결정하기 2
+7. 게임이 끝났을 때 Winner: X 또는 Winner:O 라고 표시.
+8. Board 컴포넌트에 status 구역을 추가
+9. 게임이 끝나면 statues는 승자 표시 하고, 진행중이라면 다음 플레이어 표시
+```
+      const winner = calculateWinner(squares);
+  let status;
+  if (winner) {
+    status = 'Winner: ' + winner;
+  } else {
+    status = 'Next player: ' + (xIsNext ? 'X' : 'O');
+  }
+
+
+```
+
+## 시간여행 추가하기
+- "시간을 거슬러 올라가" 기능
+
+[플레이 히스토리 저장하기]
+-  과거 상태들을 저장하고 탐색하는 것
+
+
+
+## 한 번 더 state 끌어올리기
+1. export default가 있는 Game 컴포넌트 추가
+2. Board 컴포넌트를 랜더링
+3. export default 컴포넌트는 하나만 존재
+4. index.js 파일 Board 컴포넌트 대신 Game 컴포넌트를 최상위 컴포넌트로 사용
+5. 보드에 추가할 게임 정보를 위한 공간을 확보
+- -주의- 
+ - 최상위 컴포넌트와 파일이름은 일치, 최상위에 선언.
+ ```
+ function Board() {
+  // ...
+}
+
+export default function Game() {
+  return (
+    <div className="game">
+      <div className="game-board">
+        <Board />
+      </div>
+      <div className="game-info">
+        <ol>{/*TODO*/}</ol>
+      </div>
+    </div>
+  );
+}
+```
+
+
+
+
+
+
+
+
+
 
 ### 0410 (5주차) Tic Tac Toe
 
