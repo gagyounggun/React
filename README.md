@@ -1,5 +1,180 @@
 # 202330101 가경건
 
+### 0418 (보강) Tic Tac Toe
+
+## 한 번 더 state 끌어올리기
+6. 다음 플레이어와 플레이 기록을 추적하기 위해 Game 컴포넌트에 몇 개의 state를 추가
+
+```
+      export default function Game() {
+            const [xIsNext, setXIsNext] = useState(true);
+            const [history, sethistory] = useState(Array(9).fill(null));
+      }
+```
+7. square을 연동하려면, history에서 마지막 squares의 배열을 읽어야함.
+
+8. 계산할 수 있는 충분한 정보가 있으므로 useState는 필요X
+```
+      export default function Game() {
+            const [xIsNext, setXIsNext] = useState(true);
+            const [history, sethistory] = useState(Array(9).fill(null));
+            const currentSquares = history[history.lengh - 1];
+      }
+```
+
+9. Game 컴포넌트 안의 Board 컴포넌트가 게임을 업데이트할 때 호출할 handlePlay 함께
+
+10. 
+
+11. Board 컴포넌트가 xIsNext, squares, onPlay 함수를 props로 받을 수 있도록 변경
+ - 업데이트된 squares를 배열로 호출할 수 있는 새로운 함수
+
+12. Board 함수에서 useState를 호출하는 처음 두줄을 제거
+
+13. setSquares 및 setXIsNext 호출은 새로운 onPlay 함수에 대한 단일 호출로 대체 
+
+- Board 컴포넌트는 Game컴포넌트가 전달한 props에 의해 완전히 제어
+- Game 컴포넌트에ㅔ서 handlePlay함수를 구현
+- handlePlay 함수는 더이상 호출할수 있는 setSquares 함수가 없다
+- 대신하기위해 history state 변수를 사용함
+- 새 히스토리 항목으로 추가하여 history 업데이트해야하고, Board에서 했던 것 처럼 xIsNext 값을 반전
+
+- [...history, nextSquares] 는 history에 있는 모든 항목을 포함하는 새 배열을 만들고 후에 nextSquares를 만든다.
+
+- ...history 전개 구문을 사용하면 "history 의 모든 항목 열거"로 읽을 수 있다.
+
+
+
+## 과거 움직임 보여주기
+- 일반 JavaScript 객체이므로 애플리케이션에서 전달
+- JavaScript에서 한 배열을ㄹ 다른 배열로 변환하려면 배열 map 메서드를 사용하면 됩니다.
+```
+      [1, 2, 3].map((x) => x * 2) // [2, 4, 6]
+```
+1. history 배열을 화면에 나타내는 React 엘리먼트로 변환한다.
+2. 과거의 플레이로 이동하는 버튼을 만들자
+3. 이 것을 구현하기 위해 Game 컴포넌트에서 history를 map을 이용해보자
+
+```
+      const moves = history.map((squares, move) => { })
+```
+
+1. history.map은 history는 모든 플레이를 저장하는 배열, history에 map 함수를 적용한다는 의미 
+2. history 각각의 요소 index를 순회하면서 squares 추출합니다.
+3. 각 요소는 { }안의 실행문을 실행하면서 버튼을 생성
+4. 생성된 버튼은 moves 객체(배열)에 다시 저장
+5. move는 최종 rendering에 사용
+
+### map함수의 사용
+```
+      const moves = history.map((squares, move) => { })
+```
+- 원본 배열 (history) : map이 호출된 원본 배열.
+- 원본 배열 인덱스 (move): 현재 순환 중인 원본 배열 요소의 인덱스.
+- 요소 값 (squares) : 현재 순회 중인 요소 배열의 값.
+
+6. 틱택토 게임 history의 각 플레이에 대한 버튼, list 를 생성
+
+## Key 선택하기
+
+- 리스트를 렌더링 할때 React는 렌더링 된 각 리스트 항목에 대한 몇 가지 정보를 저장
+- 업데이트할 때 React는 무엇이 변경되었는지 확인
+- 항복은 추가, 제거, 재정렬 또는 업데이트가 될 수 ㅣㅇㅆ음
+```
+// 예를 들어
+      
+      <li> Alexa:</li>
+      <li> Ben </li>
+
+      ---------------------
+
+      <li> Ben </>
+      <li> Groia</li>
+      <li> Alexa </li>
+```
+- 컴퓨터라 이것을 구분하여 이해하지 못함...
+
+- 만약 데이터베이스에서 데이터를 불러와서 사용한다면 , 데이터베이스 ID를 key로 사용할 수 있음
+```
+      <li key={user.id}>
+        {user.name}: {user.taskCount} tasks left
+      </li>
+```
+- 각 리스트 항목의 key를 가져와서 이전 리스트의 항목에서 일치하는 key를 탐색
+- 이전에는 존재하지 않았던 key가 있으면 React는 컴포넌트를 생성
+- key를 가지고 있지 않다면 React는 그 key를 가진 컴포넌트를 제거
+- 두 key가 일치한다면 컴포넌트는 이동
+- 각 React가 각 컴포넌트를 구별 하도록 React가 해당 컴포넌트의 state를 유지
+- key가 변하면 컴포넌트는 제거되고 새로운 state 와 함께 다시 생성
+
+- key는 특별하게 미리 지정된 프로퍼티
+- 반환되는 엘리먼트에 직접 key를 저장
+- 자동으로 key를 사용해 업데이트 할 컴포넌트를 결정
+- 적절한 key가 없는 경우 데이터 -> 재구성
+- key가 지정되지 않은 경우, React는 경고 배열의 인덱스를 기본 key로 사용
+- 배열의 인덱스를 기본 key로 사용하면 항목의 순서를 바꾸거나 항목을 추가/제거할 때 문제가 발생
+- 명시적으로 key={i}를 전달하면 경고는 사라지지만, 추천 X 
+
+- 배열의 인덱스를 key로 하면 안좋음, 바뀔 수 있으니까, 명시적으로 지정해라 차라리, hash값을 지정하는 게 젤 현명
+
+- key는 전역적으로 고유할 필요는 없으며, 컴포넌트와 해당 컴포넌트의 형제 컴포넌트 사이에서만 고유하면 됩니다.
+
+
+
+## 시간 여행 구현하기
+- 과거의 각 플레이에는 해당 플레이의 고유한 일련번호인 ID가 있습니다.
+- 중간에 순서를 바꾸거나 삭제하거나 삽입할 수 없기 때문에 플레이 인덱슬르 key로 사용하는 것이 안전
+
+1. <li key ={move}>로 key를 추가할 수 있으며 다시 로드하면 React의 "key"에러가 사라질 것
+
+```
+       <li key ={move}>
+            <button onClick={() => jumpTo(move)}>{description}</button>
+       </li>
+```
+
+## 시간 여행 구현하기2
+ - jumpTo 사용자가 현재 어떤 단계를 보고 있는지 추적할 수 있는 state가 하나 더 필요합니다.
+
+ 1. 이를 위해 초기값이 0인 currentMove 라는 새 state 변수를 만든다.
+
+ 2. Game 내부 jumpTo 함수를 수정해서, currentMove를 업데이트
+ 3. currentMove를 변경하는 숫자가 짝수면 xIsNext를 true로 설정
+ - handlePlat 함수 내용중 두가지를 변경
+ 4. 새로운 플레이를 하는 경우 해당 시점까지의 히스토리만 유지 history(...전개구문) 하는 대신에 history.slice(0, currentMove + 1)의 모든 항목 뒤에 추가
+ 5. 이동할 때마다 최신 히스토리 항목을 가리키도록 currentMove를 업데이트
+ ```
+ function handlePlay(nextSquares) {
+    setHistory([...history, nextSquares]);
+    setXIsNext(!xIsNext);
+    setcurrentMove(nextHistory.length-1);
+  }
+ ```
+ 6. 현재 선택한 동작을 렌더링하도록 Game 컴포넌트를 수정 (history.length - 1) -> (currentMove)
+
+  ```
+ export default function Game() {
+  const [xIsNext, setXIsNext] = useState(true);
+  const [history, setHistory] = useState([Array(9).fill(null)]); // 배열 안에 배열로 초기화
+  const [currentMove, setcurrentMove] = useState(0);
+  const currentSquares = history[currentMove];
+ ```
+
+## 최종정리
+- xIsNext state 와 setXIsnext가 필요하지 않음
+
+++ 
+1. 현재 이동에 대해서만 버튼 대신 "당신은 #번째 순서에 있습니다." 를 표시
+2. Board를 코딩대신 두개의 루프를 사용하여 사각형을 만들도고
+3. 오름차순 내림차순으로 정렬할 수 있는 토글 버튼
+4. 누군가가 승리한다면 원인이 된 세 개의 사각형을 강조표시
+
+
+
+
+
+
+
 ### 0417 (6주차) Tic Tac Toe
 
 
