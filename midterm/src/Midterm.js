@@ -19,10 +19,18 @@ function MyButton3() {
 export default function midterm() {
   return (
     <div>
-      <h1>당신은 어떤 과일을 좋아하시나요?</h1>
-      <MyButton1 />
-      <MyButton2 />
+      <h1>당신은 어떤 과일을 좋아하시나요? : </h1>
+      <MyButton1 /> <nbsp />
+      <MyButton2 /> <nbsp />
       <MyButton3 />
     </div>
   );
+
+  function MyButton1({ count, onClick }) {
+    return (
+      <button onClick={사과}>
+        <h1>당신은 어떤 과일을 좋아하시나요? : 사과 </h1>
+      </button>
+    );
+  }
 }
