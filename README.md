@@ -1,4 +1,81 @@
 # 202330101 가경건
+
+### 0515
+
+## Step 3: 최소한의 데이터만 이용해서 완벽하게 UI State 표현하기
+- state는 앱이 기억해야 하는, 변경할 수 있는 데이터의 최신 상태입니다.
+- state를 구조화 하는데 가장 중요한 원칙은 중복배제원칙(Don't Repeat Yourself)입니다.
+- 애플리케이션이 필요로 하는 가장 최소한의 `state`만 파악하고, 나머지 모든 것들은 필요에 따라 실시간으로 계산하세요.
+
+- 예를 들어, 쇼핑 리스트를 만든다고 하면 당신은 배열에 상품 아이템을 넣을 겁니다.
+- UI에 상품 아이템의 개수를 보여주고 싶다면, 상품 아이템 개수를 실시간으로 계산해서 보여주세요.
+- 애플리케이션 내 데이터들을 생각해 봅시다. 애플리케이션은 다음과 같은 데이터들을 가지고 있습니다:
+
+1. 제품의 원본 목록
+2. 사용자가 입력한 검색어
+3. 최종변수의 값
+4. 필터된 제품 목록
+
+- 이 중 어떤 것이 `state`가 되어야 할까요? 어떤 세 가지 정보를 통해 결정할 수 있습니다:
+
+1. 시간이 지나도 변하지 않는가? 그런 항목은 `state`가 아닙니다.
+2. 부모로부터 `props`를 통해 전달받는가? 그런 항목은 `state`가 아닙니다.
+   - 부모부터 입력 다른 `state`나 `props`를 가지고 계산 가능한가? 그렇다면 `state`가 아니어야 합니다!
+
+- 시간에 지남에 따라서, 다른 요소로부터 계산 될 수 없기 때문에 state로 볼수 있다.
+- 체크박스의 값은 시간에 따라 바뀌고 다른 요소로부터 계산될 수 없기에 state
+- 필터링된 제품 목록은 원본 제품 목록을 받아서 검색어와 체크 박스의 값에 따라 계산 할 수 있으므로 state가 아님
+
+## Step 4: State가 어디에 있어야 할 지 정하기
+- 이제 앱에서 최소한으로 필요한 state를 결정했다.
+- 다음으로는 어떤 컴포넌트가 UI `state`를 결정해야 합니다
+- 부모에서 자식으로 데이터를 전달하는 단방향 데이터 흐름을 사용
+- 어떤 컴포넌트가 state를 가져하하는 지 명확하지 않을 수 있지만, 해결할 수 있음
+1. 해당 `state`를 기반으로 렌더링하는 모든 컴포넌트를 찾으세요.
+2. 그들의 가장 가까운 공통된 부모 컴포넌트를 찾으세요.- 계층에서 모두를 포괄하는 상위 컴포넌트
+3. state가 어디에 위치 돼야 하는지 결정합시다
+
+```
+ function FilterableProductTable({ products }) {
+      const [filterText, setFilterText] = useState('');
+      const [inStockOnly, setInStockOnly] = useState(false);
+ }
+Hooks는 React 기능에 “연결할 수(hook into)” 있게 해주는 특별한 함수
+```
+
+```
+<div>
+  <SearchBar
+    filterText={filterText}
+    inStockOnly={inStockOnly} />
+  <ProductTable
+    products={products}
+    filterText={filterText}
+    inStockOnly={inStockOnly} />
+</div>
+```
+- 이제 어떻게 동작하는 지 알게 됨.
+- filterText의 초깃값을 useState('')에서 useState('fruit')로 수정하면
+- 검색창과 데이터 테이블이 모두 업데이트됨을 확인할 수 있습니다.
+
+
+## Step 5: 역 데이터 흐름 추가하기
+- 지금까지 우리는 계속 고정 아래로 흐르는 props와 state의 함수로써 앱을 만들었습니다.
+- 이제 사용자 입력에 따라, state를 변경하려면 반대 방향의 데이터 흐름을 만들어야 합니다.
+- 이를 위해서는 계층 구조의 하단에 있는 컴포넌트에서 FilterableProductTable의 state 데이터를 전달해야 합니다.
+
+- React는 데이터 흐름을 명시적으로 보이게 만들어 줍니다.
+- 그러나 이는 전통적인 양방향 데이터 바인딩과 조금 다릅니다.
+
+- 예제에서 체크하거나 키보드를 타이핑할 경우 UI의 변화가 없고 입력을 무시
+- 의도적으로 `<input value={filterText} />`로 코드를 쓰면서 `value`라는 `prop`에 항상 `FilterableProductTable`의 `filterText`라는 `state`를 통해서 데이터를 반로로 정했기 때
+
+- `filterText`라는 `state`가 변경되는 것이 아니라 때문에 `input`의 `value`는 반드시 얻게 되는 것입니다.
+- 우리는 사용자가 `input`을 변경할 때마다 사용자 입력을 변경할 수 있도록 `state`를 업데이트하기를 원합니다.
+- `state`는 `FilterableProductTable`이 가지고 있고 `state` 변화를 일으키는 `setFilterText`와 `setInStockOnly`를 호출 하게 됩니다.
+- `SearchBar`가 `FilterableProductTable`의 `state`를 업데이트할 수 있도록 하려면, 이 함수들을 `SearchBar`로 전달해야 합니다.
+
+
 ### 0508 
 - React를 사용하게 되면 우리가 고려하고 있는 디자인이나 많은 앱들에 대한 생각을 바꿀 수 있습니다.
 - React는 사용자 인터페이스를 빌드할 때, 먼저 이를 컴포넌트라는 조각으로 나눕니다.
